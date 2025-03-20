@@ -1471,12 +1471,6 @@ CONTAINS
       REAL(fp),  PARAMETER :: it = 1e-5_fp 
       REAL(fp),  PARAMETER :: kk = 1.38e-23_fp 
       REAL(fp),  PARAMETER :: pp = 3.5e-8_fp 
-      
-      !! lifetime for wenli
-      !REAL(fp),  PARAMETER :: fix_val = 1e-17_fp
-      
-      !REAL(fp) :: AA,BB,CC,TT_0,midle
-      !! lifetime for wenli
 
       REAL(fp) :: half, var, RH294, T0RH, BBOA, aw, wbboa
       REAL(fp) :: vis, DO0, DO3, cons, vari
@@ -1517,8 +1511,6 @@ CONTAINS
          var = half * log10(BBOAdry) + (1 - half) * (-3)
          RH294 = 10 ** var
          T0RH = (log(RH294/it)*294) / (10 + log(RH294/it))
-         !! zyz24, 是否需要考虑RTEMP接近甚至小于T0RH及173.06的情况？
-         !! T_0_RH is the RH-dependent Vogel temperature. 在294K计算得出
          BBOA = it * exp((T0RH * 10) / (RTEMP - T0RH))
          vis = 10**(-4.28 + 152.87 / (RTEMP - 173.06)) 
          DO0 = kk * RTEMP / (3 * vis * 3.14 * 0.396) 
@@ -1526,22 +1518,6 @@ CONTAINS
          cons = (1-1/(exp(0.5)))*300e+0_fp
          vari = 27 * pp * (DO3**(0.5))
          BR_LIFE = ((cons / vari) * (10**(-13.5))) / 86400e+0_fp
-          
-         !xxc24 lifetime from wenli
-         !AA = -0.0078e+0_fp * RH - 16.623e+0_fp
-         !BB = -0.009e+0_fp * RH + 83.82e+0_fp
-         !TT_0 = -0.0234e+0_fp * RH + 246.46e+0_fp
-         !CC = -0.00001169e+0_fp * RH + 0.0044038e+0_fp
-         !IF ( RTEMP .GT. (TT_0+3)) THEN
-         !   midle = AA + BB/(RTEMP-TT_0)
-         !   BR_LIFE = CC*((fix_val * RTEMP / (exp(midle)))**(-0.5)) / 24
-         !ELSE
-         !   BR_LIFE = 14e+0_fp
-         !ENDIF
-         !!xxc24_wenli
-         !IF ((I .EQ. 25) .AND. (J .EQ. 30) .AND. (L .EQ.1)) THEN
-         !   write(6,*),'RH=',RH,'RTEMP=',RTEMP,'LIFE=',BR_LIFE,'midle=',midle
-         !ENDIF
          
          IF ( BR_LIFE > 13.999e+0_fp ) THEN
             BR_LIFE = 13.999e+0_fp
