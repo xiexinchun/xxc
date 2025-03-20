@@ -1487,7 +1487,9 @@ CONTAINS
       ! Assume success
       RC        = GC_SUCCESS
       ! Initialize
-      !BR_LIFE   = 0.917e+0_fp 
+      
+      BR_LIFE   = 0.917e+0_fp 
+      
       KBR       = 1.e+0_fp / ( 86400e+0_fp * BR_LIFE ) !xnw_braging
       DTCHEM    = GET_TS_CHEM()
       BRCONV    = 0e+0_fp
@@ -1503,13 +1505,12 @@ CONTAINS
          !!xxc---BRC_LIFE calculated with temp and rh------------------------
          RTEMP  = State_Met%T(I,J,L)
          RH  = State_Met%RH(I,J,L)
-         
          aw = RH / 100 
          !! zyz24 for safety reason to avoid dividing by a close-to-0 number
          if (aw .gt. 0.9999) then
             wbboa = 0d0
          else 
-         !! zyz24
+         ! !zyz24
             wbboa = (1 + 0.05 * (aw/(1-aw)))**(-1)
          endif 
          half = (wbboa*0.004) / (wbboa*0.004 + (1 - (wbboa))*0.0554)
@@ -1525,13 +1526,13 @@ CONTAINS
          cons = (1-1/(exp(0.5)))*300e+0_fp
          vari = 27 * pp * (DO3**(0.5))
          BR_LIFE = ((cons / vari) * (10**(-13.5))) / 86400e+0_fp
-         
-         !!xxc24 lifetime from wenli
+          
+         !xxc24 lifetime from wenli
          !AA = -0.0078e+0_fp * RH - 16.623e+0_fp
          !BB = -0.009e+0_fp * RH + 83.82e+0_fp
          !TT_0 = -0.0234e+0_fp * RH + 246.46e+0_fp
          !CC = -0.00001169e+0_fp * RH + 0.0044038e+0_fp
-         !IF ( RTEMP .GT. TT_0) THEN
+         !IF ( RTEMP .GT. (TT_0+3)) THEN
          !   midle = AA + BB/(RTEMP-TT_0)
          !   BR_LIFE = CC*((fix_val * RTEMP / (exp(midle)))**(-0.5)) / 24
          !ELSE
@@ -1542,8 +1543,8 @@ CONTAINS
          !   write(6,*),'RH=',RH,'RTEMP=',RTEMP,'LIFE=',BR_LIFE,'midle=',midle
          !ENDIF
          
-         IF ( BR_LIFE > 14e+0_fp ) THEN
-            BR_LIFE = 14e+0_fp
+         IF ( BR_LIFE > 13.999e+0_fp ) THEN
+            BR_LIFE = 13.999e+0_fp
          ELSEIF ( BR_LIFE < 0.917e+0_fp ) THEN
             BR_LIFE = 0.917e+0_fp
          ENDIF

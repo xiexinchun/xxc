@@ -962,19 +962,12 @@ CONTAINS
       
        ! PM2.5 OC
        IF ( State_Diag%Archive_PM25oc  ) THEN
-          !State_Diag%PM25oc(I,J,L) = ( OCPO(I,J,L)                 &
-          !                         +   OCPI(I,J,L) * ORG_GROWTH  ) &
-          !                         * ( 1013.25_fp  / PMID(I,J,L) ) &
-          !                         * ( T(I,J,L)    / 298.0_fp    ) &
-          !                         * 1.0e+9_fp
-          State_Diag&PM25oc(I,J,L) = ( OCPO(I,J,L)                 &
-                                   +   OCPI(I,J,L) * ORG_GROWTH    &
-                                   +   BBOCPO(I,J,L) + BFOCPO(I,J,L)&
-                                   +   BBOCPI(I,J,L) * ORG_GROWTH   &
-                                   +   BFOCPI(I,J,L) * ORG_GROWTH  )&
-                                   * ( 1013.25_fp  / PMID(I,J,L)   )&
-                                   * ( T(I,J,L)    / 298.0_fp      )&
-                                   * 1.0e+9_fp      
+          State_Diag%PM25oc(I,J,L) = ( OCPO(I,J,L)                 &
+                                   +   OCPI(I,J,L) * ORG_GROWTH  ) &
+                                   * ( 1013.25_fp  / PMID(I,J,L) ) &
+                                   * ( T(I,J,L)    / 298.0_fp    ) &
+                                   * 1.0e+9_fp
+             
        ENDIF
 
        ! PM2.5 dust
@@ -1821,9 +1814,9 @@ CONTAINS
                  TEMPASYM1 = SCALEASY*ASYMAA(IWV,1,N)
 
                  RTODAER(I,J,L,IWV,NRT) = TEMPOD0 + TEMPOD1
-                 RTSSAER(I,J,L,IWV,NRT) = (TEMPOD0*TEMPSSA0 - TEMPOD1*TEMPSSA1) / &
+                 RTSSAER(I,J,L,IWV,NRT) = (TEMPOD0*TEMPSSA0 + TEMPOD1*TEMPSSA1) / &
                                           (TEMPOD0 + TEMPOD1)
-                 RTASYMAER(I,J,L,IWV,NRT) = (TEMPASYM0*TEMPSSA0*TEMPOD0 - &
+                 RTASYMAER(I,J,L,IWV,NRT) = (TEMPASYM0*TEMPSSA0*TEMPOD0 + &
                                              TEMPASYM1*TEMPSSA1*TEMPOD1)/ &
                                             (TEMPOD0*TEMPSSA0 + TEMPOD1*TEMPSSA1)          
                  !write(6,*) "is here right3"
